@@ -9,7 +9,10 @@ import (
 
 func TestNewMaxHeap(t *testing.T) {
 	data := []uint64{5, 6, 2, 1, 8, 9, 3, 4, 7}
+	assert.False(t, IsHeap(data))
+
 	h := NewMaxHeap(data)
+	assert.True(t, IsHeap(h.data))
 
 	expected := []uint64{9, 8, 5, 7, 6, 2, 3, 4, 1}
 	assert.Equal(t, expected, h.data)
@@ -32,16 +35,30 @@ func TestExtractMax(t *testing.T) {
 
 	expected = 6
 	assert.Equal(t, expected, h.ExtractMax())
+
+	assert.True(t, IsHeap(h.data))
 }
 
 func TestInsert(t *testing.T) {
 	data := []uint64{5, 6, 2, 1, 8, 9, 3, 4, 7}
 	h := NewMaxHeap(data)
 
-	h.Insert(12)
+	var index int
+	var expected []uint64
 
-	expected := []uint64{12, 9, 5, 7, 8, 2, 3, 4, 1, 6}
+	index = h.Insert(12)
+
+	expected = []uint64{12, 9, 5, 7, 8, 2, 3, 4, 1, 6}
 	assert.Equal(t, expected, h.data)
+	assert.Equal(t, 0, index)
+
+	index = h.Insert(7)
+
+	expected = []uint64{12, 9, 5, 7, 8, 2, 3, 4, 1, 6, 7}
+	assert.Equal(t, expected, h.data)
+	assert.Equal(t, 10, index)
+
+	assert.True(t, IsHeap(h.data))
 }
 
 func TestFindTop(t *testing.T) {
@@ -54,6 +71,43 @@ func TestFindTop(t *testing.T) {
 	assert.Equal(t, expected, top)
 
 	assert.Equal(t, 9, len(h.data))
+
+	assert.True(t, IsHeap(h.data))
+}
+
+func TestDeleteAt(t *testing.T) {
+	t.Run("bubble down", func(t *testing.T) {
+		data := []uint64{5, 6, 2, 1, 8, 9, 3, 4, 7}
+		h := NewMaxHeap(data)
+
+		var expected []uint64
+
+		expected = []uint64{9, 8, 5, 7, 6, 2, 3, 4, 1}
+		assert.Equal(t, expected, h.data)
+
+		h.DeleteAt(3)
+		expected = []uint64{9, 8, 5, 4, 6, 2, 3, 1}
+		assert.Equal(t, expected, h.data)
+
+		assert.True(t, IsHeap(h.data))
+	})
+
+	t.Run("bubble up", func(t *testing.T) {
+		data := []uint64{12, 9, 5, 7, 8, 2, 3, 4, 1, 6, 7}
+		h := NewMaxHeap(data)
+
+		var expected []uint64
+
+		expected = []uint64{12, 9, 5, 7, 8, 2, 3, 4, 1, 6, 7}
+		assert.Equal(t, expected, h.data)
+
+		h.DeleteAt(5)
+
+		expected = []uint64{12, 9, 7, 7, 8, 5, 3, 4, 1, 6}
+		assert.Equal(t, expected, h.data)
+
+		assert.True(t, IsHeap(h.data))
+	})
 }
 
 func randomNumbers(num int) []uint64 {

@@ -12,12 +12,12 @@ func NewMaxHeap(elems []uint64) *MaxHeap {
 	return h
 }
 
-func (h *MaxHeap) heapifyAt(i uint64) {
+func (h *MaxHeap) heapifyAt(i int) {
 	for {
 		left := 2*i + 1
 		right := 2*i + 2
 		max_elem := i
-		num := uint64(len(h.data))
+		num := len(h.data)
 
 		if left < num && h.data[left] > h.data[max_elem] {
 			max_elem = left
@@ -40,7 +40,7 @@ func (h *MaxHeap) heapifyAt(i uint64) {
 }
 
 func (h *MaxHeap) heapify() {
-	num := uint64(len(h.data))
+	num := len(h.data)
 	num = (num + 1) / 2
 	if num == 0 {
 		return
@@ -69,17 +69,17 @@ func (h *MaxHeap) ExtractMax() uint64 {
 	return result
 }
 
-func (h *MaxHeap) Insert(elem uint64) {
-	i := uint64(len(h.data))
+func (h *MaxHeap) Insert(elem uint64) int {
+	i := len(h.data)
 	h.data = append(h.data, elem)
 
 	for {
 		if i == 0 {
-			return
+			return 0
 		}
 		parent := (i+1)/2 - 1
 		if h.data[parent] >= h.data[i] {
-			return
+			return i
 		}
 
 		// swap i and parent
@@ -99,4 +99,50 @@ func (h *MaxHeap) FindTop(k uint64) []uint64 {
 		h.Insert(e)
 	}
 	return result
+}
+
+func (h *MaxHeap) DeleteAt(index int) {
+	last := len(h.data) - 1
+
+	// swap index and last
+	tmp := h.data[last]
+	h.data[last] = h.data[index]
+	h.data[index] = tmp
+
+	h.data = h.data[:last]
+
+	parent := (index+1)/2 - 1
+	if h.data[parent] < h.data[index] {
+		for {
+			if index == 0 {
+				return
+			}
+			parent := (index+1)/2 - 1
+			if h.data[parent] >= h.data[index] {
+				return
+			}
+
+			// swap i and parent
+			tmp := h.data[index]
+			h.data[index] = h.data[parent]
+			h.data[parent] = tmp
+			index = parent
+		}
+	} else {
+		h.heapifyAt(index)
+	}
+}
+
+func IsHeap(data []uint64) bool {
+	for i := range data {
+		left := 2*i + 1
+		right := 2*i + 2
+		if left < len(data) && data[i] < data[left] {
+			return false
+		}
+		if right < len(data) && data[i] < data[right] {
+			return false
+		}
+	}
+	return true
 }
