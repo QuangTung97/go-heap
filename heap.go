@@ -1,11 +1,13 @@
 package heap
 
-type HeapElem struct {
+// Elem represents a heap element
+type Elem struct {
 	Key   uint64
 	Value uint64
 }
 
-func IsMaxHeap(elems []HeapElem) bool {
+// IsMaxHeap check if array is a max heap
+func IsMaxHeap(elems []Elem) bool {
 	for i := range elems {
 		left := 2*i + 1
 		right := 2*i + 2
@@ -19,7 +21,8 @@ func IsMaxHeap(elems []HeapElem) bool {
 	return true
 }
 
-func IsMinHeap(elems []HeapElem) bool {
+// IsMinHeap check if array is a min heap
+func IsMinHeap(elems []Elem) bool {
 	for i := range elems {
 		left := 2*i + 1
 		right := 2*i + 2

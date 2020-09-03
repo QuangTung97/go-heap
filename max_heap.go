@@ -1,11 +1,13 @@
 package heap
 
+// MaxHeap a max heap
 type MaxHeap struct {
-	elems []HeapElem
+	elems []Elem
 }
 
-func NewMaxHeap(elems []HeapElem) *MaxHeap {
-	heapElems := make([]HeapElem, len(elems))
+// NewMaxHeap create a max heap
+func NewMaxHeap(elems []Elem) *MaxHeap {
+	heapElems := make([]Elem, len(elems))
 	copy(heapElems, elems)
 	h := &MaxHeap{elems: heapElems}
 	h.heapify()
@@ -16,26 +18,26 @@ func (h *MaxHeap) heapifyAt(i int) {
 	for {
 		left := 2*i + 1
 		right := 2*i + 2
-		max_elem := i
+		maxElem := i
 		num := len(h.elems)
 
-		if left < num && h.elems[left].Key > h.elems[max_elem].Key {
-			max_elem = left
+		if left < num && h.elems[left].Key > h.elems[maxElem].Key {
+			maxElem = left
 		}
 
-		if right < num && h.elems[right].Key > h.elems[max_elem].Key {
-			max_elem = right
+		if right < num && h.elems[right].Key > h.elems[maxElem].Key {
+			maxElem = right
 		}
 
-		if max_elem == i {
+		if maxElem == i {
 			return
 		}
-		// swap i and max_elem
+		// swap i and maxElem
 		tmp := h.elems[i]
-		h.elems[i] = h.elems[max_elem]
-		h.elems[max_elem] = tmp
+		h.elems[i] = h.elems[maxElem]
+		h.elems[maxElem] = tmp
 
-		i = max_elem
+		i = maxElem
 	}
 }
 
@@ -50,11 +52,13 @@ func (h *MaxHeap) heapify() {
 	}
 }
 
-func (h *MaxHeap) FindMax() HeapElem {
+// FindMax find the max element
+func (h *MaxHeap) FindMax() Elem {
 	return h.elems[0]
 }
 
-func (h *MaxHeap) ExtractMax() HeapElem {
+// ExtractMax find and pop the max element
+func (h *MaxHeap) ExtractMax() Elem {
 	result := h.elems[0]
 	last := len(h.elems) - 1
 
@@ -69,7 +73,8 @@ func (h *MaxHeap) ExtractMax() HeapElem {
 	return result
 }
 
-func (h *MaxHeap) Insert(elem HeapElem) int {
+// Insert insert a element
+func (h *MaxHeap) Insert(elem Elem) int {
 	i := len(h.elems)
 	h.elems = append(h.elems, elem)
 
@@ -90,8 +95,9 @@ func (h *MaxHeap) Insert(elem HeapElem) int {
 	}
 }
 
-func (h *MaxHeap) FindTop(k uint) []HeapElem {
-	result := make([]HeapElem, 0, k)
+// FindTop get the top k elements
+func (h *MaxHeap) FindTop(k uint) []Elem {
+	result := make([]Elem, 0, k)
 	for i := uint(0); i < k; i++ {
 		result = append(result, h.ExtractMax())
 	}
@@ -101,6 +107,7 @@ func (h *MaxHeap) FindTop(k uint) []HeapElem {
 	return result
 }
 
+// DeleteAt delete a position
 func (h *MaxHeap) DeleteAt(index int) {
 	last := len(h.elems) - 1
 
@@ -133,8 +140,9 @@ func (h *MaxHeap) DeleteAt(index int) {
 	}
 }
 
-func (h *MaxHeap) Array() []HeapElem {
-	result := make([]HeapElem, 0, len(h.elems))
+// Array returns the internal array (COPY) of heap
+func (h *MaxHeap) Array() []Elem {
+	result := make([]Elem, 0, len(h.elems))
 	for _, e := range h.elems {
 		result = append(result, e)
 	}

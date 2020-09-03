@@ -1,11 +1,13 @@
 package heap
 
+// MinHeap a min heap
 type MinHeap struct {
-	elems []HeapElem
+	elems []Elem
 }
 
-func NewMinHeap(elems []HeapElem) *MinHeap {
-	heapElems := make([]HeapElem, len(elems))
+// NewMinHeap create a min heap
+func NewMinHeap(elems []Elem) *MinHeap {
+	heapElems := make([]Elem, len(elems))
 	copy(heapElems, elems)
 	h := &MinHeap{elems: heapElems}
 	h.heapify()
@@ -16,26 +18,26 @@ func (h *MinHeap) heapifyAt(i int) {
 	for {
 		left := 2*i + 1
 		right := 2*i + 2
-		max_elem := i
+		minElem := i
 		num := len(h.elems)
 
-		if left < num && h.elems[left].Key < h.elems[max_elem].Key {
-			max_elem = left
+		if left < num && h.elems[left].Key < h.elems[minElem].Key {
+			minElem = left
 		}
 
-		if right < num && h.elems[right].Key < h.elems[max_elem].Key {
-			max_elem = right
+		if right < num && h.elems[right].Key < h.elems[minElem].Key {
+			minElem = right
 		}
 
-		if max_elem == i {
+		if minElem == i {
 			return
 		}
-		// swap i and max_elem
+		// swap i and minElem
 		tmp := h.elems[i]
-		h.elems[i] = h.elems[max_elem]
-		h.elems[max_elem] = tmp
+		h.elems[i] = h.elems[minElem]
+		h.elems[minElem] = tmp
 
-		i = max_elem
+		i = minElem
 	}
 }
 
@@ -50,11 +52,13 @@ func (h *MinHeap) heapify() {
 	}
 }
 
-func (h *MinHeap) FindMin() HeapElem {
+// FindMin get the min element
+func (h *MinHeap) FindMin() Elem {
 	return h.elems[0]
 }
 
-func (h *MinHeap) ExtractMin() HeapElem {
+// ExtractMin get and pop the min element
+func (h *MinHeap) ExtractMin() Elem {
 	result := h.elems[0]
 	last := len(h.elems) - 1
 
@@ -69,7 +73,8 @@ func (h *MinHeap) ExtractMin() HeapElem {
 	return result
 }
 
-func (h *MinHeap) Insert(elem HeapElem) int {
+// Insert inserts a element
+func (h *MinHeap) Insert(elem Elem) int {
 	i := len(h.elems)
 	h.elems = append(h.elems, elem)
 
@@ -90,8 +95,9 @@ func (h *MinHeap) Insert(elem HeapElem) int {
 	}
 }
 
-func (h *MinHeap) FindBottom(k uint) []HeapElem {
-	result := make([]HeapElem, 0, k)
+// FindBottom find the k bottom elements
+func (h *MinHeap) FindBottom(k uint) []Elem {
+	result := make([]Elem, 0, k)
 	for i := uint(0); i < k; i++ {
 		result = append(result, h.ExtractMin())
 	}
@@ -101,6 +107,7 @@ func (h *MinHeap) FindBottom(k uint) []HeapElem {
 	return result
 }
 
+// DeleteAt delete a element
 func (h *MinHeap) DeleteAt(index int) {
 	last := len(h.elems) - 1
 
@@ -133,8 +140,9 @@ func (h *MinHeap) DeleteAt(index int) {
 	}
 }
 
-func (h *MinHeap) Array() []HeapElem {
-	result := make([]HeapElem, 0, len(h.elems))
+// Array returns the internal array of min heap
+func (h *MinHeap) Array() []Elem {
+	result := make([]Elem, 0, len(h.elems))
 	for _, e := range h.elems {
 		result = append(result, e)
 	}
