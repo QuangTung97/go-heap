@@ -8,19 +8,19 @@ import (
 )
 
 func TestNewMaxHeap(t *testing.T) {
-	elems := []MaxHeapElem{
+	elems := []HeapElem{
 		{Key: 5, Value: 1}, {Key: 6, Value: 2},
 		{Key: 2, Value: 3}, {Key: 1, Value: 4},
 		{Key: 8, Value: 5}, {Key: 9, Value: 6},
 		{Key: 3, Value: 7}, {Key: 4, Value: 8},
 		{Key: 7, Value: 9},
 	}
-	assert.False(t, IsHeap(elems))
+	assert.False(t, IsMaxHeap(elems))
 
 	h := NewMaxHeap(elems)
-	assert.True(t, IsHeap(h.elems))
+	assert.True(t, IsMaxHeap(h.elems))
 
-	expected := []MaxHeapElem{
+	expected := []HeapElem{
 		{Key: 9, Value: 6}, {Key: 8, Value: 5},
 		{Key: 5, Value: 1}, {Key: 7, Value: 9},
 		{Key: 6, Value: 2}, {Key: 2, Value: 3},
@@ -31,7 +31,7 @@ func TestNewMaxHeap(t *testing.T) {
 }
 
 func TestExtractMax(t *testing.T) {
-	elems := []MaxHeapElem{
+	elems := []HeapElem{
 		{Key: 5, Value: 1}, {Key: 6, Value: 2},
 		{Key: 2, Value: 3}, {Key: 1, Value: 4},
 		{Key: 8, Value: 5}, {Key: 9, Value: 6},
@@ -40,25 +40,25 @@ func TestExtractMax(t *testing.T) {
 	}
 	h := NewMaxHeap(elems)
 
-	var expected MaxHeapElem
+	var expected HeapElem
 
-	expected = MaxHeapElem{Key: 9, Value: 6}
+	expected = HeapElem{Key: 9, Value: 6}
 	assert.Equal(t, expected, h.ExtractMax())
 
-	expected = MaxHeapElem{Key: 8, Value: 5}
+	expected = HeapElem{Key: 8, Value: 5}
 	assert.Equal(t, expected, h.ExtractMax())
 
-	expected = MaxHeapElem{Key: 7, Value: 9}
+	expected = HeapElem{Key: 7, Value: 9}
 	assert.Equal(t, expected, h.ExtractMax())
 
-	expected = MaxHeapElem{Key: 6, Value: 2}
+	expected = HeapElem{Key: 6, Value: 2}
 	assert.Equal(t, expected, h.ExtractMax())
 
-	assert.True(t, IsHeap(h.elems))
+	assert.True(t, IsMaxHeap(h.elems))
 }
 
 func TestInsert(t *testing.T) {
-	elems := []MaxHeapElem{
+	elems := []HeapElem{
 		{Key: 5, Value: 1}, {Key: 6, Value: 2},
 		{Key: 2, Value: 3}, {Key: 1, Value: 4},
 		{Key: 8, Value: 5}, {Key: 9, Value: 6},
@@ -68,11 +68,11 @@ func TestInsert(t *testing.T) {
 	h := NewMaxHeap(elems)
 
 	var index int
-	var expected []MaxHeapElem
+	var expected []HeapElem
 
-	index = h.Insert(MaxHeapElem{Key: 12, Value: 10})
+	index = h.Insert(HeapElem{Key: 12, Value: 10})
 
-	expected = []MaxHeapElem{
+	expected = []HeapElem{
 		{Key: 12, Value: 10}, {Key: 9, Value: 6},
 		{Key: 5, Value: 1}, {Key: 7, Value: 9},
 		{Key: 8, Value: 5}, {Key: 2, Value: 3},
@@ -82,9 +82,9 @@ func TestInsert(t *testing.T) {
 	assert.Equal(t, expected, h.elems)
 	assert.Equal(t, 0, index)
 
-	index = h.Insert(MaxHeapElem{Key: 7, Value: 11})
+	index = h.Insert(HeapElem{Key: 7, Value: 11})
 
-	expected = []MaxHeapElem{
+	expected = []HeapElem{
 		{Key: 12, Value: 10}, {Key: 9, Value: 6},
 		{Key: 5, Value: 1}, {Key: 7, Value: 9},
 		{Key: 8, Value: 5}, {Key: 2, Value: 3},
@@ -95,11 +95,11 @@ func TestInsert(t *testing.T) {
 	assert.Equal(t, expected, h.elems)
 	assert.Equal(t, 10, index)
 
-	assert.True(t, IsHeap(h.elems))
+	assert.True(t, IsMaxHeap(h.elems))
 }
 
 func TestFindTop(t *testing.T) {
-	elems := []MaxHeapElem{
+	elems := []HeapElem{
 		{Key: 5, Value: 1}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 1, Value: 4},
 		{Key: 8, Value: 5}, {Key: 9, Value: 6}, {Key: 3, Value: 7}, {Key: 4, Value: 8},
 		{Key: 7, Value: 9},
@@ -108,7 +108,7 @@ func TestFindTop(t *testing.T) {
 
 	top := h.FindTop(4)
 
-	expected := []MaxHeapElem{
+	expected := []HeapElem{
 		{Key: 9, Value: 6}, {Key: 8, Value: 5},
 		{Key: 7, Value: 9}, {Key: 6, Value: 2},
 	}
@@ -116,21 +116,21 @@ func TestFindTop(t *testing.T) {
 
 	assert.Equal(t, 9, len(h.elems))
 
-	assert.True(t, IsHeap(h.elems))
+	assert.True(t, IsMaxHeap(h.elems))
 }
 
 func TestDeleteAt(t *testing.T) {
 	t.Run("bubble down", func(t *testing.T) {
-		elems := []MaxHeapElem{
+		elems := []HeapElem{
 			{Key: 5, Value: 1}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 1, Value: 4},
 			{Key: 8, Value: 5}, {Key: 9, Value: 6}, {Key: 3, Value: 7}, {Key: 4, Value: 8},
 			{Key: 7, Value: 9},
 		}
 		h := NewMaxHeap(elems)
 
-		var expected []MaxHeapElem
+		var expected []HeapElem
 
-		expected = []MaxHeapElem{
+		expected = []HeapElem{
 			{Key: 9, Value: 6},
 			{Key: 8, Value: 5},
 			{Key: 5, Value: 1},
@@ -144,7 +144,7 @@ func TestDeleteAt(t *testing.T) {
 		assert.Equal(t, expected, h.elems)
 
 		h.DeleteAt(3)
-		expected = []MaxHeapElem{
+		expected = []HeapElem{
 			{Key: 9, Value: 6},
 			{Key: 8, Value: 5},
 			{Key: 5, Value: 1},
@@ -155,21 +155,20 @@ func TestDeleteAt(t *testing.T) {
 			{Key: 1, Value: 4},
 		}
 		assert.Equal(t, expected, h.elems)
-
-		assert.True(t, IsHeap(h.elems))
+		assert.True(t, IsMaxHeap(h.elems))
 	})
 
 	t.Run("bubble up", func(t *testing.T) {
-		elems := []MaxHeapElem{
+		elems := []HeapElem{
 			{Key: 5, Value: 1}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 1, Value: 4},
 			{Key: 8, Value: 5}, {Key: 9, Value: 6}, {Key: 3, Value: 7}, {Key: 4, Value: 8},
 			{Key: 7, Value: 9},
 		}
 		h := NewMaxHeap(elems)
 
-		var expected []MaxHeapElem
+		var expected []HeapElem
 
-		expected = []MaxHeapElem{
+		expected = []HeapElem{
 			{Key: 9, Value: 6},
 			{Key: 8, Value: 5},
 			{Key: 5, Value: 1},
@@ -184,7 +183,7 @@ func TestDeleteAt(t *testing.T) {
 
 		h.DeleteAt(5)
 
-		expected = []MaxHeapElem{
+		expected = []HeapElem{
 			{Key: 9, Value: 6},
 			{Key: 8, Value: 5},
 			{Key: 5, Value: 1},
@@ -195,15 +194,44 @@ func TestDeleteAt(t *testing.T) {
 			{Key: 4, Value: 8},
 		}
 		assert.Equal(t, expected, h.elems)
+		assert.True(t, IsMaxHeap(h.elems))
+	})
 
-		assert.True(t, IsHeap(h.elems))
+	t.Run("at 0", func(t *testing.T) {
+		elems := []HeapElem{
+			{Key: 5, Value: 1}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 1, Value: 4},
+			{Key: 8, Value: 5}, {Key: 9, Value: 6}, {Key: 3, Value: 7}, {Key: 4, Value: 8},
+			{Key: 7, Value: 9},
+		}
+		h := NewMaxHeap(elems)
+
+		var expected []HeapElem
+
+		expected = []HeapElem{
+			{Key: 9, Value: 6},
+			{Key: 8, Value: 5}, {Key: 5, Value: 1},
+			{Key: 7, Value: 9}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 3, Value: 7},
+			{Key: 4, Value: 8}, {Key: 1, Value: 4},
+		}
+		assert.Equal(t, expected, h.elems)
+
+		h.DeleteAt(0)
+
+		expected = []HeapElem{
+			{Key: 8, Value: 5},
+			{Key: 7, Value: 9}, {Key: 5, Value: 1},
+			{Key: 4, Value: 8}, {Key: 6, Value: 2}, {Key: 2, Value: 3}, {Key: 3, Value: 7},
+			{Key: 1, Value: 4},
+		}
+		assert.Equal(t, expected, h.elems)
+		assert.True(t, IsMaxHeap(h.elems))
 	})
 }
 
-func randomNumbers(num int) []MaxHeapElem {
-	elems := make([]MaxHeapElem, 0, num)
+func randomNumbers(num int) []HeapElem {
+	elems := make([]HeapElem, 0, num)
 	for i := 0; i < num; i++ {
-		elems = append(elems, MaxHeapElem{Key: rand.Uint64(), Value: uint64(i)})
+		elems = append(elems, HeapElem{Key: rand.Uint64(), Value: uint64(i)})
 	}
 	return elems
 }
@@ -219,7 +247,7 @@ func BenchmarkNewMaxHeap(b *testing.B) {
 	})
 }
 
-var v MaxHeapElem
+var v HeapElem
 
 func BenchmarkExtractMax(b *testing.B) {
 	const numElems = 1000000
