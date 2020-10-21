@@ -7,6 +7,28 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMaxHeapifyEmpty(t *testing.T) {
+	h := NewMaxHeap([]Elem{})
+	assert.Empty(t, h.Array())
+
+	elems := []Elem{
+		{Key: 5, Value: 1}, {Key: 6, Value: 2},
+		{Key: 2, Value: 3}, {Key: 1, Value: 4},
+		{Key: 8, Value: 5}, {Key: 9, Value: 6},
+		{Key: 3, Value: 7}, {Key: 4, Value: 8},
+		{Key: 7, Value: 9},
+	}
+	h = NewMaxHeap(elems)
+	expected := []Elem{
+		{Key: 9, Value: 6}, {Key: 8, Value: 5},
+		{Key: 5, Value: 1}, {Key: 7, Value: 9},
+		{Key: 6, Value: 2}, {Key: 2, Value: 3},
+		{Key: 3, Value: 7}, {Key: 4, Value: 8},
+		{Key: 1, Value: 4},
+	}
+	assert.Equal(t, expected, h.Array())
+}
+
 func TestNewMaxHeap(t *testing.T) {
 	elems := []Elem{
 		{Key: 5, Value: 1}, {Key: 6, Value: 2},
